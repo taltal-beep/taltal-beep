@@ -1,0 +1,45 @@
+name: header
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # daily, a little after midnight ET
+  workflow_dispatch: # lets you rebuild it by hand from the Actions tab
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - ".github/workflows/header.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Regenerate header SVGs
+        env:
+          # GH_PAT (a classic token with read:user) makes private contributions
+          # count, matching the number on your profile page. Without it the
+          # default token still works, but only sees public activity.
+          GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GH_LOGIN: ${{ github.repository_owner }}
+        run: node scripts/generate-header.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain assets)" ]]; then
+            git add assets
+            git commit -m "chore: refresh header stats"
+            git push
+          else
+            echo "no change"
+          fi
