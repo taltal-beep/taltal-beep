@@ -12,7 +12,8 @@ def load(p):
         px.append([0.299*d[base+x*3+2]+0.587*d[base+x*3+1]+0.114*d[base+x*3] for x in range(w)])
     return px,w,h
 
-def render(path, cols, x0f, y0f, x1f, y1f, ramp, gamma=1.0, equalize=True, invert=False):
+def render(path, cols, x0f, y0f, x1f, y1f, ramp, gamma=1.0, equalize=True, invert=False,
+           vignette=None, feather=0.30):
     px,W,H = load(path)
     x0,x1 = int(x0f*W), int(x1f*W)
     y0,y1 = int(y0f*H), int(y1f*H)
@@ -44,9 +45,30 @@ def render(path, cols, x0f, y0f, x1f, y1f, ramp, gamma=1.0, equalize=True, inver
     else:
         lo,hi=flat[0],flat[-1]
         norm=[[(v-lo)/(hi-lo) for v in r] for r in grid]
+    # A rectangular crop of a photo drags in whatever squared-off background
+    # sits in the corners. Fading towards an ellipse dissolves that instead of
+    # leaving a hard block, while leaving the head itself untouched.
+    def vig(c, r):
+        if not vignette:
+            return 1.0
+        dx = ((c + 0.5) / cols * 2 - 1) / vignette
+        dy = ((r + 0.5) / rows * 2 - 1) / vignette
+        d = (dx * dx + dy * dy) ** 0.5
+        if d <= 1.0:
+            return 1.0
+        if d >= 1.0 + feather:
+            return 0.0
+        t = (d - 1.0) / feather
+        return 1.0 - t * t * (3 - 2 * t)  # smoothstep
+
     out=[]
-    for r in norm:
-        out.append("".join(ramp[min(len(ramp)-1,int((v**gamma if not invert else (1-v)**gamma)*len(ramp)))] for v in r))
+    for r_i, r in enumerate(norm):
+        chars=[]
+        for c_i, v in enumerate(r):
+            x = v if not invert else 1 - v
+            x = (x ** gamma) * vig(c_i, r_i)
+            chars.append(ramp[min(len(ramp)-1, int(x*len(ramp)))])
+        out.append("".join(chars))
     return out
 
 if __name__=="__main__":
@@ -57,10 +79,14 @@ if __name__=="__main__":
 # The committed scripts/ascii-art.txt was produced with:
 #
 #   sips -s format bmp -z 576 519 photo.png --out photo.bmp
-#   python3 make-ascii.py '{"path":"photo.bmp","cols":92,
-#     "x0f":0.265,"y0f":0.205,"x1f":0.878,"y1f":0.742,
-#     "ramp":" .:-=+*#%@","equalize":false,"gamma":1.5,"invert":true}'
+#   python3 make-ascii.py '{"path":"photo.bmp","cols":86,
+#     "x0f":0.245,"y0f":0.180,"x1f":0.945,"y1f":0.845,
+#     "ramp":" .:-=+*#%@","equalize":false,"gamma":1.5,"invert":true,
+#     "vignette":0.85,"feather":0.30}'
 #
-# invert=true is what makes a photo read: dark hair becomes dense characters
-# and the bright background drops out to whitespace. gamma>1 pushes the
-# near-background tones to blank so the wall stops dithering.
+# invert=true is what makes a photo read at all: dark hair becomes dense
+# characters and the bright background drops out to whitespace. gamma>1 pushes
+# the near-background tones to blank so the wall stops dithering. The crop is
+# set to the head's real bounds (hair spans x 0.27-0.91, chin sits at y 0.81)
+# with padding, and the vignette dissolves the square corners the crop drags
+# in -- without it the dark window shutter lands as a hard block bottom-right.

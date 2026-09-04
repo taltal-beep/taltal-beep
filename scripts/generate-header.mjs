@@ -77,6 +77,13 @@ const START = 0.3; // beat before the first line lands
 const ART_W = ART_COLS * ART_SIZE * 0.6;
 const DONE = START + ART.length * LINE_MS; // when the stats may appear
 
+// The cover sweeps far enough that the cursor riding its edge ends up past
+// the right edge of the canvas, where it is clipped away. Hiding the cursor
+// with an opacity keyframe alone is not enough: browsers sometimes skip the
+// final repaint and leave a stuck block behind. The art is fully uncovered
+// once the cover has moved ART_W, so the extra travel costs nothing visually.
+const SWEEP = W - ART_X + 12;
+
 // &quot; because this string lands inside a double-quoted XML attribute.
 const MONO =
   "ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace";
@@ -126,8 +133,8 @@ function svg({ bg, art, fg, muted, stroke, fill }) {
   // the complete image rather than a blank card. The print effect is strictly
   // an enhancement for renderers that do animate.
   const style = `<style>
-    .cov{transform:translateX(${ART_W + 10}px);animation:sweep ${LINE_MS}s linear backwards}
-    @keyframes sweep{from{transform:translateX(0)}to{transform:translateX(${ART_W + 10}px)}}
+    .cov{transform:translateX(${SWEEP}px);animation:sweep ${LINE_MS}s linear backwards}
+    @keyframes sweep{from{transform:translateX(0)}to{transform:translateX(${SWEEP}px)}}
     .cur{opacity:0;animation:blip ${LINE_MS}s step-end forwards}
     @keyframes blip{0%{opacity:1}100%{opacity:0}}
     .late{animation:fade .55s ease-out ${DONE.toFixed(3)}s backwards}
