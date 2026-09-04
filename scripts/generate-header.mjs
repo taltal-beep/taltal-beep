@@ -57,8 +57,8 @@ const ART = readFileSync(resolve(ROOT, "scripts/ascii-art.txt"), "utf8")
   .split("\n");
 
 // Layout is derived, not hand-tuned, so changing ART_SIZE keeps everything aligned.
-const W = 800;
-const ART_SIZE = 11; // font-size == line-height preserves the portrait's aspect ratio
+const W = 820;
+const ART_SIZE = 10; // font-size == line-height preserves the portrait's aspect ratio
 const ART_COLS = Math.max(...ART.map((l) => l.length));
 const ART_TOP = 24;
 const ART_H = ART.length * ART_SIZE;
