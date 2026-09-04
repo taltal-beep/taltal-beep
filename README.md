@@ -16,7 +16,7 @@
 > services on Kubernetes, REST and GraphQL APIs. I also built its test
 > automation and quality infrastructure from zero.
 >
-> Currently finishing a B.Sc. in Computer Science.
+> Currently finishing a B.Sc. in Computer Science.<br>
 > Small, sharp tools over big vague ideas.
 
 ## stack
@@ -25,10 +25,10 @@
 
 ## projects
 
-[`testosterone`](https://github.com/taltal-beep/testosterone) `html`
+[`testosterone`](https://github.com/taltal-beep/testosterone) `html`<br>
 Unified quality orchestration and reporting dashboard. One place to see what ran, what broke, and why.
 
-[`behavex`](https://github.com/behavex-org/behavex) `python`
+[`behavex`](https://github.com/behavex-org/behavex) `python`<br>
 Upstream contributor to a BDD test framework with ~121K monthly downloads. Root-caused and fixed two correctness bugs affecting CI reliability.
 
 <sub>Header regenerates daily from the GitHub API. See <a href="./scripts/generate-header.mjs">scripts/generate-header.mjs</a>.</sub>
