@@ -77,12 +77,13 @@ const START = 0.3; // beat before the first line lands
 const ART_W = ART_COLS * ART_SIZE * 0.6;
 const DONE = START + ART.length * LINE_MS; // when the stats may appear
 
-// The cover sweeps far enough that the cursor riding its edge ends up past
-// the right edge of the canvas, where it is clipped away. Hiding the cursor
-// with an opacity keyframe alone is not enough: browsers sometimes skip the
-// final repaint and leave a stuck block behind. The art is fully uncovered
-// once the cover has moved ART_W, so the extra travel costs nothing visually.
-const SWEEP = W - ART_X + 12;
+// There is deliberately no cursor riding the cover's edge. A cursor needs its
+// own opacity animation to stay hidden until its line's turn, and that
+// promotes each one to a separate compositing layer which does not reliably
+// pick up the parent group's transform -- browsers left a column of stuck
+// blocks pinned to the right edge of the portrait. The reveal alone is safe
+// because a plain background-coloured rect composites with its parent.
+const SWEEP = ART_W + 10;
 
 // &quot; because this string lands inside a double-quoted XML attribute.
 const MONO =
@@ -123,7 +124,7 @@ function svg({ bg, art, fg, muted, stroke, fill }) {
   const covers = ART.map((_, i) => {
     const d = (START + i * LINE_MS).toFixed(3);
     const y = ART_TOP + i * ART_SIZE;
-    return `<g class="cov" style="animation-delay:${d}s"><rect x="${ART_X}" y="${y}" width="${ART_W + 8}" height="${ART_SIZE}" fill="${bg}"/><rect class="cur" style="animation-delay:${d}s" x="${ART_X}" y="${y + 1}" width="5" height="${ART_SIZE - 2}" fill="${fg}"/></g>`;
+    return `<g class="cov" style="animation-delay:${d}s"><rect x="${ART_X}" y="${y}" width="${ART_W + 8}" height="${ART_SIZE}" fill="${bg}"/></g>`;
   }).join("\n    ");
 
   // Every rule below animates *towards* the element's own base style, using
@@ -135,14 +136,12 @@ function svg({ bg, art, fg, muted, stroke, fill }) {
   const style = `<style>
     .cov{transform:translateX(${SWEEP}px);animation:sweep ${LINE_MS}s linear backwards}
     @keyframes sweep{from{transform:translateX(0)}to{transform:translateX(${SWEEP}px)}}
-    .cur{opacity:0;animation:blip ${LINE_MS}s step-end forwards}
-    @keyframes blip{0%{opacity:1}100%{opacity:0}}
     .late{animation:fade .55s ease-out ${DONE.toFixed(3)}s backwards}
     @keyframes fade{from{opacity:0}to{opacity:1}}
     .spark{stroke-dasharray:${len};animation:draw 1.1s ease-out ${DONE.toFixed(3)}s backwards}
     @keyframes draw{from{stroke-dashoffset:${len}}to{stroke-dashoffset:0}}
     @media (prefers-reduced-motion:reduce){
-      .cov,.cur{display:none}
+      .cov{display:none}
       .late,.spark{animation:none}
     }
   </style>`;
