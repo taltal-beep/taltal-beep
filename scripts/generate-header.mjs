@@ -69,6 +69,14 @@ const SPARK_H = 54;
 const H = SPARK_TOP + SPARK_H + 28;
 const PAD = 56;
 
+// The portrait prints one line at a time, like a terminal flushing output.
+// Each line is revealed by sliding a background-coloured cover off to the
+// right; a block cursor rides along on the cover's leading edge.
+const LINE_MS = 0.075; // seconds per line
+const START = 0.3; // beat before the first line lands
+const ART_W = ART_COLS * ART_SIZE * 0.6;
+const DONE = START + ART.length * LINE_MS; // when the stats may appear
+
 // &quot; because this string lands inside a double-quoted XML attribute.
 const MONO =
   "ui-monospace,SFMono-Regular,&quot;SF Mono&quot;,Menlo,Consolas,&quot;Liberation Mono&quot;,monospace";
@@ -89,7 +97,11 @@ function sparkline(y0, height) {
     .map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`)
     .join(" ");
   const area = `${line} L${x1},${y0 + height} L${x0},${y0 + height} Z`;
-  return { line, area };
+  let len = 0;
+  for (let i = 1; i < pts.length; i++) {
+    len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+  }
+  return { line, area, len: Math.ceil(len) };
 }
 
 function svg({ bg, art, fg, muted, stroke, fill }) {
@@ -98,16 +110,49 @@ function svg({ bg, art, fg, muted, stroke, fill }) {
       `<text x="${ART_X}" y="${ART_TOP + (i + 1) * ART_SIZE}" xml:space="preserve">${esc(l)}</text>`
   ).join("\n      ");
 
-  const { line, area } = sparkline(SPARK_TOP, SPARK_H);
+  const { line, area, len } = sparkline(SPARK_TOP, SPARK_H);
+
+  // One cover per line, each delayed by the one before it.
+  const covers = ART.map((_, i) => {
+    const d = (START + i * LINE_MS).toFixed(3);
+    const y = ART_TOP + i * ART_SIZE;
+    return `<g class="cov" style="animation-delay:${d}s"><rect x="${ART_X}" y="${y}" width="${ART_W + 8}" height="${ART_SIZE}" fill="${bg}"/><rect class="cur" style="animation-delay:${d}s" x="${ART_X}" y="${y + 1}" width="5" height="${ART_SIZE - 2}" fill="${fg}"/></g>`;
+  }).join("\n    ");
+
+  // Every rule below animates *towards* the element's own base style, using
+  // animation-fill-mode:backwards. So the resting state of this file is the
+  // finished header: anything that rasterises the SVG or ignores CSS
+  // animation (GitHub's mobile app, link previews, thumbnailers) still gets
+  // the complete image rather than a blank card. The print effect is strictly
+  // an enhancement for renderers that do animate.
+  const style = `<style>
+    .cov{transform:translateX(${ART_W + 10}px);animation:sweep ${LINE_MS}s linear backwards}
+    @keyframes sweep{from{transform:translateX(0)}to{transform:translateX(${ART_W + 10}px)}}
+    .cur{opacity:0;animation:blip ${LINE_MS}s step-end forwards}
+    @keyframes blip{0%{opacity:1}100%{opacity:0}}
+    .late{animation:fade .55s ease-out ${DONE.toFixed(3)}s backwards}
+    @keyframes fade{from{opacity:0}to{opacity:1}}
+    .spark{stroke-dasharray:${len};animation:draw 1.1s ease-out ${DONE.toFixed(3)}s backwards}
+    @keyframes draw{from{stroke-dashoffset:${len}}to{stroke-dashoffset:0}}
+    @media (prefers-reduced-motion:reduce){
+      .cov,.cur{display:none}
+      .late,.spark{animation:none}
+    }
+  </style>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${LOGIN} — ${stats.total} contributions in the last year">
   <rect width="${W}" height="${H}" fill="${bg}"/>
 
+  ${style}
+
   <g font-family="${MONO}" font-size="${ART_SIZE}" fill="${art}">
       ${artLines}
   </g>
+  <g>
+    ${covers}
+  </g>
 
-  <g font-family="${MONO}">
+  <g class="late" font-family="${MONO}">
     <text x="${PAD}" y="${STATS_BASE}" font-size="34" font-weight="600" fill="${fg}">${stats.total}</text>
     <text x="${PAD}" y="${STATS_BASE + 16}" font-size="10" letter-spacing="0.6" fill="${muted}">contributions in the last year</text>
 
@@ -117,8 +162,8 @@ function svg({ bg, art, fg, muted, stroke, fill }) {
     <text x="${W - PAD}" y="${STATS_BASE + 25}" font-size="9" letter-spacing="0.6" fill="${muted}" text-anchor="end">best week</text>
   </g>
 
-  <path d="${area}" fill="${fill}"/>
-  <path d="${line}" fill="none" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+  <path class="late" d="${area}" fill="${fill}"/>
+  <path class="spark" d="${line}" fill="none" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
 </svg>
 `;
 }
