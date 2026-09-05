@@ -72,8 +72,11 @@ const PAD = 56;
 // The portrait prints one line at a time, like a terminal flushing output.
 // Each line is revealed by sliding a background-coloured cover off to the
 // right; a block cursor rides along on the cover's leading edge.
-const LINE_MS = 0.075; // seconds per line
-const START = 0.3; // beat before the first line lands
+// Kept short on purpose: anyone skimming the profile should see the finished
+// header, not a half-drawn portrait with no numbers yet. Whole print lands in
+// under two seconds.
+const LINE_MS = 0.032; // seconds per line
+const START = 0.22; // beat before the first line lands
 const ART_W = ART_COLS * ART_SIZE * 0.6;
 const DONE = START + ART.length * LINE_MS; // when the stats may appear
 

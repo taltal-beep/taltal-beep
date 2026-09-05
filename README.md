@@ -25,10 +25,13 @@
 
 ## projects
 
-[`testosterone`](https://github.com/taltal-beep/testosterone) `html`<br>
-Unified quality orchestration and reporting dashboard. One place to see what ran, what broke, and why.
+[`testosterone`](https://github.com/taltal-beep/testosterone) `python` `typescript`<br>
+Test orchestration and reporting for Python BDD suites. One place to see what ran, what broke, and why.
+Built like production infrastructure, not a side project: contract tests that fail when the CLI docs drift, `ruff` and `mypy` enforced in CI, release-gate checklists, changelog automation, `CODEOWNERS`.
 
-[`behavex`](https://github.com/behavex-org/behavex) `python`<br>
-Upstream contributor to a BDD test framework with ~121K monthly downloads. Root-caused and fixed two correctness bugs affecting CI reliability.
+[`behavex`](https://github.com/hrcorval/behavex) `python`<br>
+Open pull requests against a BDD framework with ~121K monthly downloads, both fixing correctness bugs that make CI lie to you:
+[#249](https://github.com/hrcorval/behavex/pull/249) stops one scenario's `before_scenario` failure from failing its siblings under `--parallel-scheme feature`, and
+[#250](https://github.com/hrcorval/behavex/pull/250) stops hook crashes being reported as skipped or passed instead of failed.
 
 <sub>Header regenerates daily from the GitHub API. See <a href="./scripts/generate-header.mjs">scripts/generate-header.mjs</a>.</sub>
