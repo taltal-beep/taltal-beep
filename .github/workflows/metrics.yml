@@ -128,3 +128,4 @@ jobs:
           plugin_contributors: yes
           plugin_contributors_contributions: yes
           plugin_contributors_sections: contributors
+          plugin_contributors_ignored: cursoragent, cursor[bot], github-actions[bot], dependabot[bot]
