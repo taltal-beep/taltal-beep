@@ -6,15 +6,17 @@
   <a href="mailto:ttlgptinc@gmail.com"><img src="https://img.shields.io/badge/Email-000000?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"></a>
 </p>
 
-<p align="center"><img src="metrics/terminal.svg" width="480" alt="terminal: whoami and git status"></p>
-
 ### about
+
+<img align="left" width="300" src="metrics/terminal.svg" alt="terminal: whoami and git status">
 
 Three years in Unit 8200 building a large-scale virtualization-management platform end to end:
 React frontend, Python and Go services on Kubernetes, REST and GraphQL APIs.
 I also built its test automation and quality infrastructure from zero.
 
 Small, sharp tools over big vague ideas.
+
+<br clear="left">
 
 ### stack
 
