@@ -1,5 +1,5 @@
 <h1 align="center">Ariel Even</h1>
-<p align="center"><b>Python &amp; backend engineer</b> · Unit 8200 veteran · B.Sc. Computer Science</p>
+<p align="center"><b> backend engineer</b> · Unit 8200 veteran · B.Sc. Computer Science</p>
 
 <p align="center">
   <a href="https://www.linkedin.com/in/ariel-even-8a125041a"><img src="https://img.shields.io/badge/LinkedIn-000000?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
