@@ -38,24 +38,18 @@ jobs:
           config_display: large
           config_animations: no
           extras_css: ${{ env.MONO_CSS }}
-          base: header, activity, community, repositories, metadata
-          base_hireable: yes
-          config_order: base.header, isocalendar, languages, lines, notable, base.activity+community, base.repositories, base.metadata
+          base: ""
+          config_order: isocalendar, languages, notable, lines
 
           plugin_isocalendar: yes
           plugin_isocalendar_duration: half-year
 
           plugin_languages: yes
-          plugin_languages_limit: 8
+          plugin_languages_limit: 6
           plugin_languages_sections: most-used
-          plugin_languages_details: bytes-size, percentage
-          plugin_languages_colors: 0:#111111, 1:#333333, 2:#555555, 3:#777777, 4:#999999, 5:#aaaaaa, 6:#c4c4c4, 7:#dddddd
-          plugin_languages_ignored: html, css, scss, shell, dockerfile, makefile, logos, objective-c
-
-          plugin_lines: yes
-          plugin_lines_sections: base, repositories, history
-          plugin_lines_repositories_limit: 4
-          plugin_lines_skipped: obsidian-vault
+          plugin_languages_details: percentage
+          plugin_languages_colors: 0:#111111, 1:#333333, 2:#555555, 3:#777777, 4:#999999, 5:#bbbbbb
+          plugin_languages_ignored: html, css, scss, shell, dockerfile, makefile, logos, objective-c, jinja, plpgsql
 
           plugin_notable: yes
           plugin_notable_from: all
@@ -63,37 +57,14 @@ jobs:
           plugin_notable_indepth: yes
           plugin_notable_self: no
 
-  projects:
-    runs-on: ubuntu-latest
-    needs: overview # avoid two jobs pushing at once
-    steps:
-      - name: Projects
-        uses: lowlighter/metrics@v3.34
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          user: ${{ github.repository_owner }}
-          filename: metrics/projects.svg
-          template: classic
-          committer_message: "chore: refresh metrics (projects)"
-          config_timezone: Asia/Jerusalem
-          config_display: large
-          config_animations: no
-          extras_css: ${{ env.MONO_CSS }}
-          base: ""
-          config_order: repositories, followup
-
-          plugin_repositories: yes
-          plugin_repositories_featured: taltal-beep/testosterone, hrcorval/behavex
-          plugin_repositories_order: featured
-
-          plugin_followup: yes
-          plugin_followup_sections: user, repositories
-          plugin_followup_indepth: yes
-
+          plugin_lines: yes
+          plugin_lines_sections: repositories
+          plugin_lines_repositories_limit: 3
+          plugin_lines_skipped: obsidian-vault
 
   terminal:
     runs-on: ubuntu-latest
-    needs: projects
+    needs: overview # one job pushes at a time
     steps:
       - name: Terminal card
         uses: lowlighter/metrics@v3.34
@@ -106,7 +77,16 @@ jobs:
           config_timezone: Asia/Jerusalem
           config_animations: no
           extras_css: ${{ env.MONO_CSS }}
-          base: header, activity, community, repositories
+          base: header, activity
+          # Drop zero-count lines, follower count and the "Tracked activity" block.
+          extras_js: |
+            document.querySelectorAll(".stdout").forEach(el => {
+              el.innerHTML = el.innerHTML
+                .replace(/\n*<b>Tracked activity<\/b>[\s\S]*$/, "\n")
+                .split("\n")
+                .filter(line => !/<b>\s*0<\/b>/.test(line) && !/followed by/.test(line))
+                .join("\n")
+            })
 
   contributors:
     runs-on: ubuntu-latest
