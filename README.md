@@ -38,6 +38,6 @@ Two fixes to a BDD framework with ~121K monthly downloads, both for bugs that ma
 ---
 
 <p align="center"><img src="metrics/overview.svg" alt="GitHub metrics overview" width="100%"></p>
-<p align="center"><img src="metrics/activity.svg" alt="Recent activity" width="100%"></p>
+<p align="center"><img src="metrics/projects.svg" alt="Featured projects and PR stats" width="100%"></p>
 
 <p align="center"><sub>metrics regenerate daily via <a href="https://github.com/lowlighter/metrics">lowlighter/metrics</a></sub></p>
