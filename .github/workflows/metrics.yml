@@ -59,8 +59,8 @@ jobs:
 
           plugin_lines: yes
           plugin_lines_sections: repositories
-          plugin_lines_repositories_limit: 3
-          plugin_lines_skipped: obsidian-vault
+          plugin_lines_repositories_limit: 2
+          plugin_lines_skipped: obsidian-vault, fake-api
 
   terminal:
     runs-on: ubuntu-latest
@@ -78,6 +78,7 @@ jobs:
           config_animations: no
           extras_css: ${{ env.MONO_CSS }}
           base: header, activity
+          config_padding: 0, 0
           # Drop zero-count lines, follower count and the "Tracked activity" block.
           extras_js: |
             document.querySelectorAll(".stdout").forEach(el => {
