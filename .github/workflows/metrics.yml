@@ -1,0 +1,128 @@
+name: metrics
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # daily
+  workflow_dispatch: # rebuild by hand from the Actions tab
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/metrics.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: metrics
+  cancel-in-progress: false
+
+env:
+  # Monochrome: strip every color the templates and plugins bake in.
+  MONO_CSS: |
+    foreignObject > div { filter: grayscale(100%) contrast(1.1); }
+    a, .field a { color: inherit !important; }
+
+jobs:
+  overview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Overview
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: ${{ github.repository_owner }}
+          filename: metrics/overview.svg
+          template: classic
+          committer_message: "chore: refresh metrics (overview)"
+          config_timezone: Asia/Jerusalem
+          config_display: large
+          config_animations: no
+          extras_css: ${{ env.MONO_CSS }}
+          base: header, activity, community, repositories, metadata
+          base_hireable: yes
+          config_order: base.header, isocalendar, languages, lines, notable, achievements, base.activity+community, base.repositories, habits, base.metadata
+
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+
+          plugin_languages: yes
+          plugin_languages_limit: 8
+          plugin_languages_sections: most-used, recently-used
+          plugin_languages_details: bytes-size, percentage
+          plugin_languages_colors: 0:#111111, 1:#333333, 2:#555555, 3:#777777, 4:#999999, 5:#aaaaaa, 6:#c4c4c4, 7:#dddddd
+          plugin_languages_ignored: html, css, scss, shell, dockerfile, makefile, logos, objective-c
+
+          plugin_lines: yes
+          plugin_lines_sections: base, repositories, history
+          plugin_lines_repositories_limit: 4
+
+          plugin_notable: yes
+          plugin_notable_from: all
+          plugin_notable_types: commit, pull_request
+          plugin_notable_indepth: yes
+          plugin_notable_self: no
+
+          plugin_achievements: yes
+          plugin_achievements_threshold: B
+          plugin_achievements_display: compact
+          plugin_achievements_secrets: yes
+          plugin_achievements_limit: 8
+
+          plugin_habits: yes
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          plugin_habits_charts_type: graph
+          plugin_habits_days: 30
+          plugin_habits_from: 400
+
+  activity:
+    runs-on: ubuntu-latest
+    needs: overview # avoid two jobs pushing at once
+    steps:
+      - name: Activity
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: ${{ github.repository_owner }}
+          filename: metrics/activity.svg
+          template: classic
+          committer_message: "chore: refresh metrics (activity)"
+          config_timezone: Asia/Jerusalem
+          config_display: large
+          config_animations: no
+          extras_css: ${{ env.MONO_CSS }}
+          base: ""
+          config_order: introduction, repositories, activity, code, followup, calendar, topics, stars
+
+          plugin_introduction: yes
+          plugin_introduction_title: yes
+
+          plugin_repositories: yes
+          plugin_repositories_featured: taltal-beep/testosterone, hrcorval/behavex
+          plugin_repositories_order: featured
+
+          plugin_activity: yes
+          plugin_activity_limit: 6
+          plugin_activity_days: 30
+          plugin_activity_filter: push, pr, review, release, ref/create
+          plugin_activity_visibility: public
+          plugin_activity_timestamps: yes
+
+          plugin_code: yes
+          plugin_code_lines: 10
+          plugin_code_days: 7
+          plugin_code_visibility: public
+
+          plugin_followup: yes
+          plugin_followup_sections: user, repositories
+          plugin_followup_indepth: yes
+
+          plugin_calendar: yes
+          plugin_calendar_limit: 2
+
+          plugin_topics: yes
+          plugin_topics_mode: icons
+          plugin_topics_limit: 12
+
+          plugin_stars: yes
+          plugin_stars_limit: 3
