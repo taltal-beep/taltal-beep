@@ -43,7 +43,7 @@ jobs:
           config_order: base.header, isocalendar, languages, lines, notable, base.activity+community, base.repositories, base.metadata
 
           plugin_isocalendar: yes
-          plugin_isocalendar_duration: full-year
+          plugin_isocalendar_duration: half-year
 
           plugin_languages: yes
           plugin_languages_limit: 8
@@ -90,3 +90,41 @@ jobs:
           plugin_followup_sections: user, repositories
           plugin_followup_indepth: yes
 
+
+  terminal:
+    runs-on: ubuntu-latest
+    needs: projects
+    steps:
+      - name: Terminal card
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: ${{ github.repository_owner }}
+          filename: metrics/terminal.svg
+          template: terminal
+          committer_message: "chore: refresh metrics (terminal)"
+          config_timezone: Asia/Jerusalem
+          config_animations: no
+          extras_css: ${{ env.MONO_CSS }}
+          base: header, activity, community, repositories
+
+  contributors:
+    runs-on: ubuntu-latest
+    needs: terminal
+    steps:
+      - name: Testosterone contributors
+        uses: lowlighter/metrics@v3.34
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          user: ${{ github.repository_owner }}
+          repo: testosterone
+          filename: metrics/contributors.svg
+          template: repository
+          committer_message: "chore: refresh metrics (contributors)"
+          config_display: large
+          config_animations: no
+          extras_css: ${{ env.MONO_CSS }}
+          base: header
+          plugin_contributors: yes
+          plugin_contributors_contributions: yes
+          plugin_contributors_sections: contributors

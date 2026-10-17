@@ -11,11 +11,15 @@
 
 ### about
 
+<img align="right" width="380" src="metrics/terminal.svg" alt="terminal">
+
 Three years in Unit 8200 building a large-scale virtualization-management platform end to end:
 React frontend, Python and Go services on Kubernetes, REST and GraphQL APIs.
 I also built its test automation and quality infrastructure from zero.
 
 Small, sharp tools over big vague ideas.
+
+<br clear="right">
 
 ### stack
 
@@ -38,6 +42,7 @@ Two fixes to a BDD framework with ~121K monthly downloads, both for bugs that ma
 ---
 
 <p align="center"><img src="metrics/overview.svg" alt="GitHub metrics overview" width="100%"></p>
+<p align="center"><img src="metrics/contributors.svg" alt="Testosterone contributors" width="100%"></p>
 <p align="center"><img src="metrics/projects.svg" alt="Featured projects and PR stats" width="100%"></p>
 
 <p align="center"><sub>metrics regenerate daily via <a href="https://github.com/lowlighter/metrics">lowlighter/metrics</a></sub></p>
