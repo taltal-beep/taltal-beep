@@ -8,21 +8,21 @@
 
 ### about
 
-<img align="left" width="300" src="metrics/terminal.svg" alt="terminal: whoami and git status">
-
 Three years in Unit 8200 building a large-scale virtualization-management platform end to end:
 React frontend, Python and Go services on Kubernetes, REST and GraphQL APIs.
 I also built its test automation and quality infrastructure from zero.
 
 Small, sharp tools over big vague ideas.
 
-<br clear="left">
-
 ### stack
+
+<img align="left" width="300" src="metrics/terminal.svg" alt="terminal: whoami and git status">
 
 <p>
 <img src="https://img.shields.io/badge/Python-000000?style=flat-square&logo=python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/Go-000000?style=flat-square&logo=go&logoColor=white" alt="Go"> <img src="https://img.shields.io/badge/TypeScript-000000?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript"> <img src="https://img.shields.io/badge/React-000000?style=flat-square&logo=react&logoColor=white" alt="React"> <img src="https://img.shields.io/badge/FastAPI-000000?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"> <img src="https://img.shields.io/badge/Node.js-000000?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js"> <img src="https://img.shields.io/badge/PostgreSQL-000000?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL"> <img src="https://img.shields.io/badge/MongoDB-000000?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB"> <img src="https://img.shields.io/badge/Redis-000000?style=flat-square&logo=redis&logoColor=white" alt="Redis"> <img src="https://img.shields.io/badge/Elasticsearch-000000?style=flat-square&logo=elasticsearch&logoColor=white" alt="Elasticsearch"> <img src="https://img.shields.io/badge/Docker-000000?style=flat-square&logo=docker&logoColor=white" alt="Docker"> <img src="https://img.shields.io/badge/Kubernetes-000000?style=flat-square&logo=kubernetes&logoColor=white" alt="Kubernetes"> <img src="https://img.shields.io/badge/GraphQL-000000?style=flat-square&logo=graphql&logoColor=white" alt="GraphQL"> <img src="https://img.shields.io/badge/Linux-000000?style=flat-square&logo=linux&logoColor=white" alt="Linux">
 </p>
+
+<br clear="left">
 
 ### work
 
