@@ -51,7 +51,54 @@ Two upstream fixes for bugs that made CI report the wrong result.
 
 </td>
 </tr>
+<tr>
+<td width="50%" valign="top">
+
+<a href="https://github.com/taltal-beep/pytest-tzcheck"><img src="https://img.shields.io/badge/pytest--tzcheck-000000?style=for-the-badge&logo=github&logoColor=white" alt="pytest-tzcheck"></a>
+
+<img src="https://img.shields.io/badge/Python-000000?style=flat-square&logo=python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/pytest-000000?style=flat-square&logo=pytest&logoColor=white" alt="pytest"> <a href="https://pypi.org/project/pytest-tzcheck/"><img src="https://img.shields.io/pypi/v/pytest-tzcheck?style=flat-square&labelColor=000000&color=333333" alt="PyPI"></a>
+
+`pytest --tzcheck` reruns every test under several timezones
+and lists the ones whose outcome changes.
+
+<sub>built after a fix of mine passed locally and failed on a UTC CI runner · on that commit it flags the same 5 of 163 tests CI did</sub>
+
+</td>
+<td width="50%" valign="top">
+
+<a href="https://github.com/taltal-beep/mcp-server-celery"><img src="https://img.shields.io/badge/mcp--server--celery-000000?style=for-the-badge&logo=github&logoColor=white" alt="mcp-server-celery"></a>
+
+<img src="https://img.shields.io/badge/Python-000000?style=flat-square&logo=python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/MCP-000000?style=flat-square&logo=modelcontextprotocol&logoColor=white" alt="MCP"> <a href="https://pypi.org/project/mcp-server-celery/"><img src="https://img.shields.io/pypi/v/mcp-server-celery?style=flat-square&labelColor=000000&color=333333" alt="PyPI"></a>
+
+Read-only MCP server for debugging Celery from an AI assistant:
+workers and queue depths, broker credentials masked in every response.
+
+<sub>listed in the MCP registry · integration-tested in CI against real Redis and RabbitMQ</sub>
+
+</td>
+</tr>
 </table>
+
+### open source
+
+Open pull requests, each a root-caused bug with a regression test.
+
+| project | PR | bug |
+|---|---|---|
+| celery | [#10870](https://github.com/celery/celery/pull/10870) | `delay()` ignored positional-only parameters, rejecting valid calls and sending invalid ones to the worker |
+| celery | [#10891](https://github.com/celery/celery/pull/10891) | `crontab(minute='*/2-3')` silently ran every two minutes instead of raising |
+| airflow | [#74838](https://github.com/apache/airflow/pull/74838) | `BranchDateTimeOperator` took the wrong branch for Dags east of UTC |
+| prefect | [#23436](https://github.com/PrefectHQ/prefect/pull/23436) | `RRuleSchedule` RDATE and EXDATE values shifted timezone |
+| redis-py | [#4464](https://github.com/redis/redis-py/pull/4464) | `decode_responses=False` in a URL turned decoding on |
+| docker-py | [#3458](https://github.com/docker/docker-py/pull/3458) | Dockerfile contents from outside the build context were sent in the query string |
+| apscheduler | [#1166](https://github.com/agronholm/apscheduler/pull/1166) | the SQLAlchemy store returned every job for an empty ID list |
+| behavex | [#251](https://github.com/hrcorval/behavex/pull/251) | a literal `]]>` in step text broke the JUnit XML report |
+| fastmcp | [#5661](https://github.com/PrefectHQ/fastmcp/pull/5661) | resource templates with a literal query string could not be read |
+| litellm | [#45854](https://github.com/BerriAI/litellm/pull/45854) | `trim_messages` changed its return shape depending on the code path |
+| llama_index | [#23460](https://github.com/run-llama/llama_index/pull/23460) | Anthropic prompt-cache markers on system prompts were dropped |
+| crewAI | [#8047](https://github.com/crewAIInc/crewAI/pull/8047) | valid tool arguments rejected by boolean schema bounds |
+| dspy | [#10616](https://github.com/stanfordnlp/dspy/pull/10616) | `XMLAdapter` read a `None` optional list back as `['None']` |
+| moto | [#10360](https://github.com/getmoto/moto/pull/10360) | EventBridge patterns skipped arrays of objects |
 
 ### github
 
