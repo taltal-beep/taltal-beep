@@ -12,8 +12,6 @@ Three years in Unit 8200 building a large-scale virtualization-management platfo
 React frontend, Python and Go services on Kubernetes, REST and GraphQL APIs.
 I also built its test automation and quality infrastructure from zero.
 
-Small, sharp tools over big vague ideas.
-
 ### stack
 
 <img align="right" width="300" src="metrics/terminal.svg" alt="terminal: whoami and git status">
