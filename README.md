@@ -8,7 +8,7 @@
 
 ### about
 
-Three years in Unit 8200 building a large-scale virtualization-management platform end to end:
+Served in Unit 8200 building a large-scale virtualization-management platform end to end:
 React frontend, Python and Go services on Kubernetes, REST and GraphQL APIs.
 I also built its test automation and quality infrastructure from zero.
 
