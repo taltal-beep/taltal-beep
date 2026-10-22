@@ -53,12 +53,13 @@ One place to see what ran, what broke, and why.
 
 <a href="https://github.com/hrcorval/behavex"><img src="https://img.shields.io/badge/behavex-000000?style=for-the-badge&logo=github&logoColor=white" alt="behavex"></a>
 
-<img src="https://img.shields.io/github/stars/hrcorval/behavex?style=flat-square&labelColor=000000&color=333333" alt="stars"> <img src="https://img.shields.io/pypi/dm/behavex?style=flat-square&labelColor=000000&color=333333" alt="downloads"> <img src="https://img.shields.io/badge/merged%20%C2%B7%20shipped%20in%204.6.6-333333?style=flat-square" alt="merged · shipped in 4.6.6">
+<img src="https://img.shields.io/github/stars/hrcorval/behavex?style=flat-square&labelColor=000000&color=333333" alt="stars"> <img src="https://img.shields.io/pypi/dm/behavex?style=flat-square&labelColor=000000&color=333333" alt="downloads"> <img src="https://img.shields.io/badge/merged%20%C2%B7%20shipped%20in%204.6.6%20%26%204.6.8-333333?style=flat-square" alt="merged · shipped in 4.6.6 &amp; 4.6.8">
 
-Two upstream fixes for bugs that made CI report the wrong result.
+Three upstream fixes for bugs that made CI report the wrong result.
 
 <a href="https://github.com/hrcorval/behavex/pull/249"><img src="https://img.shields.io/badge/%23249%20%C2%B7%20isolate%20before__scenario%20failures-000000?style=flat-square&logo=github&logoColor=white" alt="#249 · isolate before_scenario failures"></a><br>
-<a href="https://github.com/hrcorval/behavex/pull/250"><img src="https://img.shields.io/badge/%23250%20%C2%B7%20hook%20crashes%20now%20fail-000000?style=flat-square&logo=github&logoColor=white" alt="#250 · hook crashes now fail"></a>
+<a href="https://github.com/hrcorval/behavex/pull/250"><img src="https://img.shields.io/badge/%23250%20%C2%B7%20hook%20crashes%20now%20fail-000000?style=flat-square&logo=github&logoColor=white" alt="#250 · hook crashes now fail"></a><br>
+<a href="https://github.com/hrcorval/behavex/pull/251"><img src="https://img.shields.io/badge/%23251%20%C2%B7%20valid%20JUnit%20XML%20with%20%5D%5D%3E-000000?style=flat-square&logo=github&logoColor=white" alt="#251 · valid JUnit XML with ]]&gt;"></a>
 
 </td>
 </tr>
@@ -92,7 +93,16 @@ workers and queue depths, broker credentials masked in every response.
 
 ### open source
 
-Open pull requests, each a root-caused bug with a regression test.
+Each one a root-caused bug with a regression test.
+
+**merged**
+
+| project | PR | bug |
+|---|---|---|
+| redis-py | [#4464](https://github.com/redis/redis-py/pull/4464) | `ssl_validate_ocsp=True` in a connection URL silently skipped OCSP validation |
+| behavex | [#249](https://github.com/hrcorval/behavex/pull/249), [#250](https://github.com/hrcorval/behavex/pull/250), [#251](https://github.com/hrcorval/behavex/pull/251) | hook failures and a literal `]]>` in step text made CI report the wrong result |
+
+**open**
 
 | project | PR | bug |
 |---|---|---|
@@ -100,10 +110,9 @@ Open pull requests, each a root-caused bug with a regression test.
 | celery | [#10891](https://github.com/celery/celery/pull/10891) | `crontab(minute='*/2-3')` silently ran every two minutes instead of raising |
 | airflow | [#74838](https://github.com/apache/airflow/pull/74838) | `BranchDateTimeOperator` took the wrong branch for Dags east of UTC |
 | prefect | [#23436](https://github.com/PrefectHQ/prefect/pull/23436) | `RRuleSchedule` RDATE and EXDATE values shifted timezone |
-| redis-py | [#4464](https://github.com/redis/redis-py/pull/4464) | `decode_responses=False` in a URL turned decoding on |
+| redis-py | [#4468](https://github.com/redis/redis-py/pull/4468) | `decode_responses=False` in a URL turned decoding on (reviewed, held for the next major release) |
 | docker-py | [#3458](https://github.com/docker/docker-py/pull/3458) | Dockerfile contents from outside the build context were sent in the query string |
 | apscheduler | [#1166](https://github.com/agronholm/apscheduler/pull/1166) | the SQLAlchemy store returned every job for an empty ID list |
-| behavex | [#251](https://github.com/hrcorval/behavex/pull/251) | a literal `]]>` in step text broke the JUnit XML report |
 | fastmcp | [#5661](https://github.com/PrefectHQ/fastmcp/pull/5661) | resource templates with a literal query string could not be read |
 | litellm | [#45854](https://github.com/BerriAI/litellm/pull/45854) | `trim_messages` changed its return shape depending on the code path |
 | llama_index | [#23460](https://github.com/run-llama/llama_index/pull/23460) | Anthropic prompt-cache markers on system prompts were dropped |
